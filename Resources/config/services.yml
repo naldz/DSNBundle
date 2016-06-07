@@ -1,0 +1,10 @@
+services:
+    naldz.dsnparser.driver.mysql:
+        class: Naldz\Bundle\DsnParserBundle\DsnParser\Driver\MysqlDsnParser
+
+    naldz.dsnparser.driver.sqlite:
+        class: Naldz\Bundle\DsnParserBundle\DsnParser\Driver\SqliteDsnParser
+
+    naldz.dsnparser.parser:
+        class: Naldz\Bundle\DsnParserBundle\DsnParser\DsnParser
+        arguments: [{ mysql: @naldz.dsnparser.driver.mysql, sqlite: @naldz.dsnparser.driver.sqlite}]

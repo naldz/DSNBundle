@@ -16,7 +16,7 @@
         "symfony/console": "2.4.*"
     },
     "autoload": {
-        "psr-0": { "Naldz\\Bundle\\DSNParserBundle": "" }
+        "psr-0": { "Naldz\\Bundle\\DsnParserBundle": "" }
     },
-    "target-dir": "Naldz/Bundle/DSNParserBundle"
+    "target-dir": "Naldz/Bundle/DsnParserBundle"
 }

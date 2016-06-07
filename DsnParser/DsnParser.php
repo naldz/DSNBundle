@@ -1,42 +1,32 @@
 <?php
 
-namespace Naldz\Bundle\DSNParserBundle\DsnParser;
+namespace Naldz\Bundle\DsnParserBundle\DsnParser;
 
-use Naldz\Bundle\DBPatcherBundle\Patcher\DrivableInterface;
-use Naldz\Bundle\DBPatcherBundle\Patcher\DsnParser;
+use Naldz\Bundle\DsnParserBundle\DsnParser\Driver\DsnParserInterface;
+use Naldz\Bundle\DsnParserBundle\DsnParser\Exception\InvalidDsnException;
 
-class DriverConfigurator
+class DsnParser implements DsnParserInterface
 {
-
-    private $dsn;
     private $driverMap;
 
-    private $driver;
-
-    public function __construct($dsn, $driverMap = array())
+    public function __construct($driverMap = array())
     {
-        $this->dsn = $dsn;
         $this->driverMap = $driverMap;
     }
 
-    public function configure(DrivableInterface $drivableObject)
+    public function parse($dsn)
     {
-        if (is_null($this->driver)) {
-            $dsnChunks = explode(':', $this->dsn);
-            if (empty($dsnChunks)) {
-                throw new \Exception('Unable to get driver type from dsn: '.$this->dsn);
-            }
+        $dbType = parse_url($dsn, PHP_URL_SCHEME);
 
-            $driverType = $dsnChunks[0];
-
-            if (!isset($this->driverMap[$driverType])) {
-                throw new \InvalidArgumentException('Unsupported driver: '.$driverType);
-            }
-
-            $this->driver = $this->driverMap[$driverType];
+        if (!strlen($dbType)) {
+            throw new InvalidDsnException(sprintf('Unable to get driver type from dsn: %s', $dsn));
         }
 
-        $drivableObject->setDriver($this->driver);
-    }
+        if (!isset($this->driverMap[$dbType])) {
+            throw new \InvalidArgumentException('Unsupported driver: '.$dbType);
+        }
 
+        $driver = $this->driverMap[$dbType];
+        return $driver->parse($dsn);
+    }
 }
