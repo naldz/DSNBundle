@@ -1,5 +1,5 @@
 {
-    "name": "root/dsn-parser-bundle",
+    "name": "naldz/dsn-parser-bundle",
     "description": "Symfony2 Bundle for parsing Datasource strings.",
     "authors": [
         {
